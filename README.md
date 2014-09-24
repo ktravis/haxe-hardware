@@ -10,18 +10,18 @@ Install via `haxelib git haxe-hardware https://github.com/ktravis/haxe-hardware`
 
 Add to `project.xml`:
 
-  <haxelib name="openfl" />
-  <haxelib name="haxe-hardware" if="android" />
+    <haxelib name="openfl" />
+    <haxelib name="haxe-hardware" if="android" />
 
 And import into your project (haxe) with:
   
-  import Hardware;
+    import Hardware;
 
 Exposed methods are currently:
 
-  public function vibrate(int duration):Void;
-  public function getScreenWidth():Int;
-  public function getScreenHeight():Int;
+    public function vibrate(int duration):Void;
+    public function getScreenWidth():Int;
+    public function getScreenHeight():Int;
 
 More can be simply added in the java source file, replicating the function and
 corresponding `JNI.createStaticMethod(...)` call in `Hardware.hx`.
