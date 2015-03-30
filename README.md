@@ -19,10 +19,14 @@ And import into your project (haxe) with:
 
 Exposed methods are currently:
 
-    public function vibrate(int duration):Void;
-    public function getScreenWidth():Int;
-    public function getScreenHeight():Int;
+    public static function vibrate(int duration):Void;
+    public static function getScreenWidth():Int;
+    public static function getScreenHeight():Int;
+    public static function wakeUp():Void;
 
 More can be simply added in the java source file, replicating the function and
 corresponding `JNI.createStaticMethod(...)` call in `Hardware.hx`.
   
+### Contributions
+
+Thank you to [alagator](https://github.com/alagatar) for contributing `wakeUp()`!
