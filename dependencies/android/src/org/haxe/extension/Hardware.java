@@ -65,8 +65,11 @@ public class Hardware extends Extension
         wakeLock = null;
 
         KeyguardManager keyguardManager = (KeyguardManager) mainActivity.getSystemService(Activity.KEYGUARD_SERVICE); 
-        keyguardLock = keyguardManager.newKeyguardLock(Activity.KEYGUARD_SERVICE); 
-        keyguardLock.disableKeyguard(); 
+        if(keyguardLock == null)
+        {
+            keyguardLock = keyguardManager.newKeyguardLock(Activity.KEYGUARD_SERVICE); 
+        }
+        keyguardLock.disableKeyguard();
     }
 
     public static int getScreenHeight()
@@ -114,6 +117,10 @@ public class Hardware extends Extension
     */
     public void onPause () 
     {
+        if(keyguardLock != null)
+        {
+            keyguardLock.reenableKeyguard();
+        }
     }
 
     /**
