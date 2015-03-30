@@ -1,6 +1,5 @@
 package org.haxe.extension;
 
-
 import android.os.Vibrator;
 import android.graphics.Point;
 import android.view.Display;
@@ -12,6 +11,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 
 
 /* 
@@ -40,80 +44,111 @@ import android.view.View;
    function for performing a single task, like returning a value
    back to Haxe from Java.
    */
-public class Hardware extends Extension {
-  public static Point size;
+public class Hardware extends Extension 
+{
+    public static Point size;
 
-  public static void vibrate(int duration)
-  {
-    ((Vibrator) mainContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(duration);
-  }
-  public static int getScreenHeight()
-  {
-    return size.y;
-  }
-  public static int getScreenWidth()
-  {
-    return size.x;
-  }
+    private static KeyguardLock keyguardLock=null;
 
-  /**
-   * Called when an activity you launched exits, giving you the requestCode 
-   * you started it with, the resultCode it returned, and any additional data 
-   * from it.
-   */
-  public boolean onActivityResult (int requestCode, int resultCode, Intent data) {
-    return true;
-  }
+    public static void vibrate(int duration)
+    {
+        ((Vibrator) mainContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(duration);
+    }
 
-  /**
-   * Called when the activity is starting.
-   */
-  public void onCreate (Bundle savedInstanceState) {
-  }
+    public static void wakeUp()
+    {
+        PowerManager pm = (PowerManager) mainContext.getSystemService(Context.POWER_SERVICE);
+        WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+        PowerManager.ACQUIRE_CAUSES_WAKEUP, "Hardware.class");
+        wakeLock.acquire();
+        wakeLock.release();
+        wakeLock = null;
 
-  /**
-   * Perform any final cleanup before an activity is destroyed.
-   */
-  public void onDestroy () {
-  }
+        KeyguardManager keyguardManager = (KeyguardManager) mainActivity.getSystemService(Activity.KEYGUARD_SERVICE); 
+        keyguardLock = keyguardManager.newKeyguardLock(Activity.KEYGUARD_SERVICE); 
+        keyguardLock.disableKeyguard(); 
+    }
 
-  /**
-   * Called as part of the activity lifecycle when an activity is going into
-   * the background, but has not (yet) been killed.
-   */
-  public void onPause () {
-  }
+    public static int getScreenHeight()
+    {
+        return size.y;
+    }
 
-  /**
-   * Called after {@link #onStop} when the current activity is being 
-   * re-displayed to the user (the user has navigated back to it).
-   */
-  public void onRestart () {
-  }
+    public static int getScreenWidth()
+    {
+        return size.x;
+    }
 
-  /**
-   * Called after {@link #onRestart}, or {@link #onPause}, for your activity 
-   * to start interacting with the user.
-   */
-  public void onResume () {
-  }
+    /**
+    * Called when an activity you launched exits, giving you the requestCode 
+    * you started it with, the resultCode it returned, and any additional data 
+    * from it.
+    */
+    public boolean onActivityResult (int requestCode, int resultCode, Intent data) 
+    {
+        return true;
+    }
 
-  /**
-   * Called after {@link #onCreate} &mdash; or after {@link #onRestart} when  
-   * the activity had been stopped, but is now again being displayed to the 
-   * user.
-   */
-  public void onStart () {
-    Display display = mainActivity.getWindowManager().getDefaultDisplay();
-    size = new Point();
-    display.getSize(size);
-  }
+    /**
+    * Called when the activity is starting.
+    */
+    public void onCreate (Bundle savedInstanceState) 
+    {
+    }
 
-  /**
-   * Called when the activity is no longer visible to the user, because 
-   * another activity has been resumed and is covering this one. 
-   */
-  public void onStop () {
-  }
+    /**
+    * Perform any final cleanup before an activity is destroyed.
+    */
+    public void onDestroy () 
+    {
+        if(keyguardLock != null)
+        {
+            keyguardLock.reenableKeyguard();
+            keyguardLock = null;
+        }
+    }
 
+    /**
+    * Called as part of the activity lifecycle when an activity is going into
+    * the background, but has not (yet) been killed.
+    */
+    public void onPause () 
+    {
+    }
+
+    /**
+    * Called after {@link #onStop} when the current activity is being 
+    * re-displayed to the user (the user has navigated back to it).
+    */
+    public void onRestart () 
+    {
+    }
+
+    /**
+    * Called after {@link #onRestart}, or {@link #onPause}, for your activity 
+    * to start interacting with the user.
+    */
+    public void onResume () 
+    {
+    }
+
+    /**
+    * Called after {@link #onCreate} &mdash; or after {@link #onRestart} when  
+    * the activity had been stopped, but is now again being displayed to the 
+    * user.
+    */
+    public void onStart () 
+    {
+        Display display = mainActivity.getWindowManager().getDefaultDisplay();
+        size = new Point();
+        display.getSize(size);
+    }
+
+    /**
+    * Called when the activity is no longer visible to the user, because 
+    * another activity has been resumed and is covering this one. 
+    */
+    public void onStop () 
+    {
+    }
 }
