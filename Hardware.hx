@@ -4,6 +4,8 @@ package;
 import cpp.Lib;
 #elseif neko
 import neko.Lib;
+#elseif hl
+import hl.lib;
 #end
 
 #if (android && openfl)
