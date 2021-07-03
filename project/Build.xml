@@ -18,6 +18,7 @@
 	
 	<set name="name_prefix" value="lib" if="iphone"/>
 	<set name="ARM_ARCH" value="-v7" if="HXCPP_ARMV7"/>
+	<set name="ARM_ARCH" value="-64" if="HXCPP_ARM64"/>
 	<set name="name_extra" value="${ARM_ARCH}" if="android"/>
 	<set name="name_extra" value=".iphoneos${ARM_ARCH}" if="iphoneos"/>
 	<set name="name_extra" value=".iphonesim" if="iphonesim"/>

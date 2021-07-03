@@ -4,10 +4,12 @@ package;
 import cpp.Lib;
 #elseif neko
 import neko.Lib;
+#elseif hl
+import hl.lib;
 #end
 
 #if (android && openfl)
-import openfl.utils.JNI;
+import lime.system.JNI;
 #end
 
 class Hardware 
